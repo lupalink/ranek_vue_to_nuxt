@@ -33,7 +33,30 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/auth'
   ],
+  auth: {
+    localStorage: {
+      prefix: 'auth.'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'http://localhost/wp_ranek/wp-json/jwt-auth/v1/token',
+            method: 'post',
+            propertyName: 'token'
+          },
+          user: {
+            url: 'http://localhost/wp_ranek/wp-json/api/usuario',
+            method: 'get',
+            propertyName: false
+          },
+          logout: false
+        }
+      }
+    }
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},

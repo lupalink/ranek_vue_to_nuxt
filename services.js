@@ -16,12 +16,12 @@ const axiosInstance = axios.create({
 // interceptador
 axiosInstance.interceptors.request.use(
   function(config){
-    const token = localStorage.getItem('auth._token.local'); 
-    console.log(token);
-    if(token==true){
+    const token = localStorage.getItem('auth.token.local'); 
+    // console.log(token);
+    if(token){
       config.headers.Authorization = token;
     }
-    console.log("passou aqui");
+    // console.log("passou aqui");
     return config;
   },
   function (error){

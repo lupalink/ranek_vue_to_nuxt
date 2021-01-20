@@ -13,7 +13,13 @@
 
 
 <script>
-export default {}
+export default {
+  created() {
+    if (!window.localStorage.token) {
+      window.localStorage.removeItem("auth.token.local");
+    }
+  }
+}
 </script>
 
 <style scoped>

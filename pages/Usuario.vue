@@ -18,16 +18,16 @@
      <nav class="sidenav">
       <ul>
         <li>    
-          <nuxt-link to="/usuario">Produtos</nuxt-link>          
+          <nuxt-link to="/usuario/produto">Produtos</nuxt-link>          
         </li>
         <li>
-          <nuxt-link to="usuario/compras">Compras</nuxt-link> 
+          <nuxt-link to="compras">Compras</nuxt-link> 
         </li>
         <li>
-          <nuxt-link to="usuario/vendas">Vendas</nuxt-link> 
+          <nuxt-link to="vendas">Vendas</nuxt-link> 
         </li>
         <li>         
-          <nuxt-link to="usuario/editar">Editar Usuário</nuxt-link> 
+          <nuxt-link to="editar">Editar Usuário</nuxt-link> 
         </li>
         <li>
           <button @click.prevent="deslogar">Deslogar</button>
@@ -35,6 +35,12 @@
       </ul>
     </nav>
     <transition mode="out-in">
+      <!-- <p>Ola</p> -->
+     
+        <!-- <UsuarioProdutos/> -->
+      <!-- <router-view></router-view> -->
+      <!-- <Nuxt :nuxt-child="UsuarioProdutos" /> -->
+      
       <nuxt-child />
     </transition>
   </section>
@@ -51,10 +57,11 @@ export default {
   methods: {
     async deslogar() {
       await this.$auth.logout()
+      window.localStorage.removeItem("auth.token.local");
     }
   },
   created(){
-     console.log( this.$store.state.auth.user)
+    //  console.log( this.$store.state.auth.user)
   }
 };
 </script>

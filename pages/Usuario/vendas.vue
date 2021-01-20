@@ -5,7 +5,7 @@
     rm(view): UsuarioVendas
   -->
   <section>
-    <!-- <div v-if="vendas">
+    <div v-if="vendas">
       <h2>Vendas</h2>
       <div class="produtos-wrapper" v-for="(venda, index) in vendas" :key="index">
         <ProdutoItem v-if="venda.produto" :produto="venda.produto">
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <PaginaCarregando v-else/> -->
+    <PaginaCarregando v-else/>
   </section>
 </template>
 
@@ -56,9 +56,9 @@ export default {
     }
   },
   created() {
-    if (this.login) {
+    // if (this.login) {
       this.getVendas();
-    }
+    // }
   }
 };
 </script>

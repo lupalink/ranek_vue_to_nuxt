@@ -5,8 +5,7 @@
     rm(view): UsuarioCompras
   -->
   <section>
-    <h2>Compras</h2>
-    <!-- <div v-if="compras">
+    <div v-if="compras">
       <h2>Compras</h2>
       <div class="produtos-wrapper" v-for="(compra, index) in compras" :key="index">
         <ProdutoItem v-if="compra.produto" :produto="compra.produto">
@@ -17,7 +16,7 @@
         </ProdutoItem>
       </div>
     </div>
-    <PaginaCarregando v-else/> -->
+    <PaginaCarregando v-else/>
   </section>
 </template>
 
@@ -36,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["usuario", "login"])
+    ...mapState(["auth", "login"])
   },
   methods: {
     getCompras() {
@@ -46,14 +45,14 @@ export default {
     }
   },
   watch: {
-    login() {
-      this.getCompras();
-    }
+    // login() {
+    //   this.getCompras();
+    // }
   },
   created() {
-    if (this.login) {
+    // if (this.login) {
       this.getCompras();
-    }
+    // }
   }
 };
 </script>

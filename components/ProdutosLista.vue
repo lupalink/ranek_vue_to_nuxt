@@ -9,12 +9,14 @@
     <div v-if="produtos && produtos.length" class="produtos" key="produtos">
       <div class="produto" v-for="(produto, index) in produtos" :key="index">
         <!-- aponta a rota para produto com parametro da props id: informando que id está em produto -->
-        <!-- <router-link :to="{name: 'produto', params: {id: produto.id}}"> -->
+        <router-link :to="{name: 'produto-id-details', params: {id: produto.id}}">
           <img v-if="produto.fotos" :src="produto.fotos[0].src" :alt="produto.fotos[0].titulo" />
           <p class="preco">{{produto.preco}}</p>
           <h2 class="titulo">{{produto.nome}}</h2>
           <p>{{produto.descricao}}</p>
-        <!-- </router-link> -->
+        </router-link>
+           <!-- <button style="float: right; padding: 3px 0" type="text" @click="viewDetails(produto.id)">View Details</button> -->
+        
       </div>
       <ProdutosPaginar :produtosTotal="produtosTotal" :produtosPorPagina="produtosPorPagina" />
     </div>
@@ -46,10 +48,8 @@ export default {
   },
 
   computed: {
-    // retrna os dados serializado na função  serialize em helpers retornando na rota  de busca o valor da url e adiciona paginete apresentando em produtosPorPagina
     url() {
       const query = serialize(this.$route.query);
-      // console.log(query);
       return `/produto?_limit=${this.produtosPorPagina}${query}`;
     },
   },
@@ -62,19 +62,17 @@ export default {
         this.produtos = response.data;
       });
     },
+     viewDetails(postId){
+        this.$router.push({path: `/produto/${postId}/details`})
+      }
   },
-  // ativa o método getProdutos toda vez que a url é modificada
   watch: {
     url() {
       this.getProdutos();
     },
   },
-  // ativa o método getProdutos toda vez que a aplicação é iniciada
   created() {
     this.getProdutos();
-    // console.log(this.$auth.$state);  
-
-
   },
 };
 </script>

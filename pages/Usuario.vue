@@ -5,16 +5,6 @@
     rm(compoments): Usuario
   -->
   <section class="usuario">
-
-     <!-- <div>
-    <nuxt-link to="/">Go to Home</nuxt-link>
-    <br>
-    <nuxt-link to="/child">Go to Child</nuxt-link>
-    <br>
-    <br>
-    <nuxt-child />
-  </div> -->
-
      <nav class="sidenav">
       <ul>
         <li>    
@@ -35,12 +25,6 @@
       </ul>
     </nav>
     <transition mode="out-in">
-      <!-- <p>Ola</p> -->
-     
-        <!-- <UsuarioProdutos/> -->
-      <!-- <router-view></router-view> -->
-      <!-- <Nuxt :nuxt-child="UsuarioProdutos" /> -->
-      
       <nuxt-child />
     </transition>
   </section>

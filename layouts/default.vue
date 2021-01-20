@@ -2,7 +2,9 @@
   <div id="app">
     <TheHeader/>
       <main id="main">
+        <transition mode="out-in">
         <Nuxt />
+        </transition>
       </main>
     <TheFooter/>
   </div>

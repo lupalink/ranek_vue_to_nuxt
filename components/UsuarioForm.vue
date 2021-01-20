@@ -6,12 +6,12 @@
   -->
   <form>
     <label for="nome">Nome</label>
-    <input id="nome" name="nome" type="text" :value="usuario.nome">
-    <!-- <label for="email">Email</label>
+    <input id="nome" name="nome" type="text" v-model="nome">
+    <label for="email">Email</label>
     <input id="email" name="email" type="email" v-model="email">
     <label for="senha">Senha</label>
-    <input id="senha" name="senha" type="password" v-model="senha"> -->
-    <!-- <label for="cep">Cep</label>
+    <input id="senha" name="senha" type="password" v-model="senha">
+    <label for="cep">Cep</label>
     <input id="cep" name="cep" type="text" v-model="cep" @keyup="preencherCep">
     <label for="rua">Logradoro</label>
     <input id="rua" name="rua" type="text" v-model="rua">
@@ -22,7 +22,7 @@
     <label for="cidade">Cidade</label>
     <input id="cidade" name="cidade" type="text" v-model="cidade">
     <label for="estado">Estado</label>
-    <input id="estado" name="estado" type="text" v-model="estado"> -->
+    <input id="estado" name="estado" type="text" v-model="estado">
     <div class="button">
       <slot></slot>
     </div>
@@ -32,13 +32,9 @@
 <script>
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
-import { mapGetters } from 'vuex'
+
 export default {
-  computed: {  
-      usuario () {
-      return this.$store.state.auth.user
-    }
-  },
+  computed: {
     ...mapFields({
       fields: [
         "nome",
@@ -54,22 +50,25 @@ export default {
       base: "usuario",
       mutation: "UPDATE_USUARIO"
     }),
-  //    mostrarDadosLogin() {
-  //     return !this.$store.state.login || this.$route.name === "usuario-editar";
-  //   }
-  // },
+     mostrarDadosLogin() {
+      // return !this.$store.state.login || this.$route.name === "usuario-editar";
+    }
+  },
   methods: {
-    // preencherCep() {
-    //   const cep = this.cep.replace(/\D/g, "");
-    //   if (cep.length === 8) {
-    //     getCep(cep).then(response => {
-    //       this.rua = response.data.logradouro;
-    //       this.bairro = response.data.bairro;
-    //       this.estado = response.data.uf;
-    //       this.cidade = response.data.localidade;
-    //     });
-    //   }
-    // }
+     getCep(cep) {
+  return axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+     },
+    preencherCep() {
+      const cep = this.cep.replace(/\D/g, "");
+      if (cep.length === 8) {
+        getCep(cep).then(response => {
+          this.rua = response.data.logradouro;
+          this.bairro = response.data.bairro;
+          this.estado = response.data.uf;
+          this.cidade = response.data.localidade;
+        });
+      }
+    }
   }
 };
 </script>

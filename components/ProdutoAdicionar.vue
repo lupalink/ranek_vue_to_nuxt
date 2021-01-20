@@ -48,7 +48,7 @@ export default {
       form.append("preco", this.produto.preco);
       form.append("descricao", this.produto.descricao);
       form.append("vendido", this.produto.vendido);
-      form.append("usuario_id", this.$store.state.usuario.id);
+      form.append("usuario_id", this.$store.state.auth.user.id);
 
       return form;
     },

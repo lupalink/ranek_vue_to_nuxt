@@ -10,9 +10,8 @@
       <nuxt-link to="/" class="logo">
         <img src="@/assets/ranek.svg" alt="Ranek" />
       </nuxt-link> 
-      <nuxt-link v-if="this.$store.state.auth.loggedIn" class="btn" to="/usuario">{{nome}}</nuxt-link>
+      <nuxt-link v-if="this.$store.state.auth.loggedIn" class="btn" to="/usuario/produto">{{nome}}</nuxt-link>
       <nuxt-link v-else class="btn" to="/login">Vender / Login</nuxt-link> 
-
      
 
       <!-- <select class="btn"> -->
@@ -31,9 +30,7 @@
 <script>
 
 export default {
-  // name: "TheHeader",
   computed: {
-  
     nome() {
       return this.$store.state.auth.user.nome.replace(/ .*/, "");
     }

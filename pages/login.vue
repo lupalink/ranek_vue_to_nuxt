@@ -1,74 +1,35 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-4 is-offset-4">
-          <h2 class="title has-text-centered">Log In</h2>
-
-          <Notification v-if="error" type="danger" :message="error" />
-
-          <form method="post" @submit.prevent="login">
-            <div class="field">
-              <label class="label">Email</label>
-              <div class="control">
-                <input
-                  v-model="email"
-                  type="text"
-                  class="input"
-                  name="email"
-                />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Password</label>
-              <div class="control">
-                <input
-                  v-model="password"
-                  type="password"
-                  class="input"
-                  name="password"
-                />
-              </div>
-            </div>
-            <div class="control">
-              <button type="submit" class="button is-dark">
-                Log In
-              </button>
-            </div>
-          </form>
-          <div style="margin-top: 20px">
-            <p>
-              Don't have an account?
-              <nuxt-link to="/register">Register</nuxt-link>
-            </p>
-            <p>
-              <nuxt-link to="/forgot-password">Forgot Password?</nuxt-link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section class="login">
+    <h1>Login</h1>
+    <form>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" v-model="email">
+      <label for="senha">Senha</label>
+      <input type="password" name="senha" id="senha" v-model="password">
+      <button class="btn" @click.prevent="logar">Logar</button>
+      <ErroNotificacao :erros = "erros"/>
+    </form>
+    <p class="perdeu">
+      <a href="http://localhost/wp_ranek/wp-login.php?action=lostpassword" target="_blank">Perdeu a senha? Clique aqui.</a>
+    </p>
+    <LoginCriar/>
   </section>
 </template>
 
 <script>
 import Notification from '~/components/Notification'
-
 export default {
   middleware: 'guest',
-  components: {
-    Notification
-  },
   data() {
     return {
       email: '',
       password: '',
-      error: null
+      erros: []
     }
   },
   methods: {
-    async login() {
-      this.error = null
+    async logar() {
+      this.erros = [];
       try {
         await this.$auth.loginWith('local', {
           data: {
@@ -76,12 +37,48 @@ export default {
             password: this.password
           }
         })
-        // this.$router.push('/profile')
         this.$router.push('/')
-      } catch (e) {
-        this.error = 'erro';
+      } catch (error) {
+        this.erros.push(error.response.data.message);
       }
     }
   }
 }
 </script>
+
+<style scoped>
+.login {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 40px;
+  color: #87f;
+}
+
+form {
+  display: grid;
+}
+
+.btn {
+  width: 100%;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.perdeu {
+  text-align: center;
+  margin: 20px auto 0 auto;
+}
+
+.perdeu a:hover {
+  color: #87f;
+  text-decoration: underline;
+}
+</style>
+

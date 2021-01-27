@@ -37,7 +37,10 @@ export default {
             password: this.password
           }
         })
-        this.$router.push('/')
+        // console.log(this.$auth.$storage.state["token.local"])
+        this.$store.dispatch("getUsuario");
+        this.$router.push('/usuario/produto')
+        
       } catch (error) {
         this.erros.push(error.response.data.message);
       }

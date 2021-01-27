@@ -64,6 +64,13 @@ export default {
 
       button.removeAttribute("disabled");
       button.value = "Adicionar Produto";
+
+        this.produto.id = ''
+        this.produto.nome = ''
+        this.produto.preco = ''
+        this.produto.descricao = ''
+        this.produto.fotos = ''
+       
     }
   }
 };

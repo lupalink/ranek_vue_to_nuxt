@@ -18,7 +18,7 @@ export function serialize(obj) {
 // Recebe uma opção, nesse CacheStorage, um objeto com options. Nessa opçãoo tem três coisas  
 // os fieds são são campos que queremos mapear, a base que é o usuário ou não, e a mutation e no final retorna o objeto. Funciona como get e ser para auxiliar na mutação dos dados.
 export function mapFields(options) {
-  const object = {};
+  const object = [];
   for (let x = 0; x < options.fields.length; x++) {
     const field = [options.fields[x]];
     object[field] = {

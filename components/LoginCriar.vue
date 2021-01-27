@@ -18,28 +18,21 @@
 </template>
 
 <script>
-import UsuarioForm from "@/components/UsuarioForm.vue";
 export default {
-  name: "LoginCriar",
-  components: {
-    UsuarioForm
-  },
   data() {
     return {
       criar: false,
       erros: []
     };
   },
-  // método para mandar informações e criar usuário
   methods: {
     async criarUsuario() {
       this.erros = [];
-      try {
-        // await this.$store.dispatch("criarUsuario", this.$store.state.usuario, await "getUsuario", this.$store.state.email);
+      try {       
         await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("getUsuario");
-        this.$router.push({ name: "usuario" });
+        this.$router.push({ name: "usuario-produto" });
       } catch (error) {
         this.erros.push(error.response.data.message);
       }

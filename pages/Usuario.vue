@@ -1,8 +1,8 @@
 <template>
   <!-- 
-    refactor(compoments): Usuario
-    add(compoments): Usuario
-    rm(compoments): Usuario
+    refactor(pages): Usuario
+    add(pages): Usuario
+    rm(pages): Usuario
   -->
   <section class="usuario">
      <nav class="sidenav">
@@ -40,6 +40,7 @@ export default {
   name: "Usuario",
   methods: {
     async deslogar() {
+      this.$store.dispatch("deslogarUsuario");
       await this.$auth.logout()
       window.localStorage.removeItem("auth.token.local");
     }

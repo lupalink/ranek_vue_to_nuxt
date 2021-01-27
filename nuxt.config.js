@@ -37,6 +37,9 @@ export default {
     '@nuxtjs/auth'
   ],
   auth: {
+    redirect: {
+      home: '/usuario/produto'
+    },
     localStorage: {
       prefix: 'auth.'
     },
@@ -45,6 +48,11 @@ export default {
     },
     strategies: {
       local: {
+        token: {
+          property: 'token',
+          // required: true,
+          // type: 'Bearer'
+        },
         endpoints: {
           login: {
             url: 'http://localhost/wp_ranek/wp-json/jwt-auth/v1/token',

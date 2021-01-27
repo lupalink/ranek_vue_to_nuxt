@@ -1,8 +1,8 @@
 <template>
   <!-- 
-    refactor(compoments): Home
-    add(compoments): Home
-    rm(compoments): Home
+    refactor(pages): index
+    add(pages): index
+    rm(pages): index
   -->
   <section>    
     <h1>👍 Compre ou Venda 👎</h1>
@@ -15,9 +15,16 @@
 <script>
 export default {
   created() {
-    if (!window.localStorage.token) {
-      window.localStorage.removeItem("auth.token.local");
-    }
+    const token = this.$auth.$storage.state["token.local"]
+    if (this.$store.state.auth.loggedIn){
+      api
+      .validateToken()
+      .then(() => {
+        this.$store.dispatch("getUsuario");
+      })
+    }else {
+      localStorage.clear()
+    }     
   }
 }
 </script>

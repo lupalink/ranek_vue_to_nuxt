@@ -32,7 +32,6 @@
 <script>
 import { mapFields } from "@/helpers.js";
 import { getCep } from "@/services.js";
-
 export default {
   computed: {
     ...mapFields({
@@ -48,16 +47,13 @@ export default {
         "estado"
       ],
       base: "usuario",
-      mutation: "UPDATE_USUARIO"
-    }),
-     mostrarDadosLogin() {
-      // return !this.$store.state.login || this.$route.name === "usuario-editar";
-    }
+      mutation: "ATUALIZA_USUARIO"
+    }),     
   },
   methods: {
-     getCep(cep) {
-  return axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-     },
+    getCep(cep) {
+      return axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+    },
     preencherCep() {
       const cep = this.cep.replace(/\D/g, "");
       if (cep.length === 8) {

@@ -30,46 +30,42 @@ export default {
     };
   },
   computed: {
-    ...mapState(["auth"]),
+    ...mapState(["usuario"]),
     compra() {
       return {
         // dados da compra
-        comprador_id: this.auth.user.email,
+        comprador_id: this.usuario.email,
         vendedor_id: this.produto.usuario_id,
         produto: this.produto,
         endereco: {
-          cep: this.auth.user.cep,
-          rua: this.auth.user.rua,
-          numero: this.auth.user.numero,
-          bairro: this.auth.user.bairro,
-          cidade: this.auth.user.cidade,
-          estado: this.auth.user.estado
+          cep: this.usuario.cep,
+          rua: this.usuario.rua,
+          numero: this.usuario.numero,
+          bairro: this.usuario.bairro,
+          cidade: this.usuario.cidade,
+          estado: this.usuario.estado
         }
       };
     }
   },
   methods: {
-    // método para postar a compra
     criarTransacao() {
       return api.post("/transacao", this.compra).then(() => {
-        // manda para página compras
         this.$router.push({ name: "usuario-compras" });
       });
     },
     async criarUsuario() {
       try {
-        // await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
-        // await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch("criarUsuario", this.$store.state.usuario);
+        await this.$store.dispatch("logarUsuario", this.$store.state.usuario);
         await this.$store.dispatch("getUsuario");
         await this.criarTransacao();
       } catch (error) {
         this.erros.push(error.response.data.message);
       }
     },
-    // chama criarTransacao para finalizar a compra
     finalizarCompra() {
       this.erros = [];
-      // vetifica se o usuário está logado
       if (this.$store.state.auth.loggedIn) {
         this.criarTransacao();
       } else {

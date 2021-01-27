@@ -33,6 +33,7 @@ export default {
   computed: {
     nome() {
       return this.$store.state.auth.user.nome.replace(/ .*/, "");
+      // return this.$store.state.usuario.nome.replace(/ .*/, "");
     }
   },
   methods: {

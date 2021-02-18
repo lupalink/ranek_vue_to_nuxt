@@ -1,7 +1,7 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'vue to nuxt',
+    title: 'Pna Webservice',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -38,7 +38,7 @@ export default {
   ],
   auth: {
     redirect: {
-      home: '/usuario/produto'
+      home: '/'
     },
     localStorage: {
       prefix: 'auth.'
@@ -49,18 +49,18 @@ export default {
     strategies: {
       local: {
         token: {
-          property: 'token',
+          property: 'data.access_token',
           // required: true,
           // type: 'Bearer'
         },
         endpoints: {
           login: {
-            url: 'http://localhost/wp_ranek/wp-json/jwt-auth/v1/token',
+            url: 'http://127.0.0.1:8000/api/v1/auth/login',
             method: 'post',
-            propertyName: 'token'
+            propertyName: 'data.access_token'
           },
           user: {
-            url: 'http://localhost/wp_ranek/wp-json/api/usuario',
+            url: 'http://127.0.0.1:8000/api/v1/auth/user',
             method: 'get',
             propertyName: false
           },

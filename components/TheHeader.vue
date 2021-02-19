@@ -8,7 +8,8 @@
   <header>
     <nav>
       <nuxt-link to="/" class="logo">
-        <img src="@/assets/ranek.svg" alt="Ranek" />
+        <!-- <img src="@/assets/ranek.svg" alt="Ranek" /> -->
+      <h2>PNAWS</h2>
       </nuxt-link> 
       <nuxt-link v-if="this.$store.state.auth.loggedIn" class="btn" to="/usuario/produto">{{nome}}</nuxt-link>
       <nuxt-link v-else class="btn" to="/login">Vender / Login</nuxt-link> 
@@ -32,7 +33,7 @@
 export default {
   computed: {
     nome() {
-      return this.$store.state.auth.user.nome.replace(/ .*/, "");
+      return this.$store.state.auth.user.name.replace(/ .*/, "");
       // return this.$store.state.usuario.nome.replace(/ .*/, "");
     }
   },

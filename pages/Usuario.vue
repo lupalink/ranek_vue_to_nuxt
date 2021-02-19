@@ -8,13 +8,19 @@
      <nav class="sidenav">
       <ul>
         <li>    
-          <nuxt-link to="/usuario/produto">Produtos</nuxt-link>          
+          <nuxt-link to="/usuario/produto">DashBoard</nuxt-link>          
         </li>
         <li>
-          <nuxt-link to="compras">Compras</nuxt-link> 
+          <nuxt-link to="empresas">Empresas</nuxt-link> 
         </li>
         <li>
-          <nuxt-link to="vendas">Vendas</nuxt-link> 
+          <nuxt-link to="vendas">Veículos</nuxt-link> 
+        </li>
+         <li>
+          <nuxt-link to="sinapro">Sinapro</nuxt-link> 
+        </li>
+         <li>
+          <nuxt-link to="cadastro">Cadastro</nuxt-link> 
         </li>
         <li>         
           <nuxt-link to="editar">Editar Usuário</nuxt-link> 
@@ -55,7 +61,8 @@ export default {
 .usuario {
   display: grid;
   grid-template-columns: minmax(140px, 200px) 1fr;
-  max-width: 900px;
+  /* max-width: 900px; */
+  max-width: 96%;
   margin: 40px auto;
   grid-gap: 30px;
   padding: 20px;

@@ -1,10 +1,40 @@
 # STORE
 
-**This directory is not required, you can delete it if you don't want to use it.**
+### exemplos de mutations
 
-This directory contains your Vuex Store files.
-Vuex Store option is implemented in the Nuxt.js framework.
+```javascript
+  CHANGE_USER(state , payload) {
+  console.log(payload.nome)
+  state.auth.user.nome = payload.nome
+  state.user.senha = payload.senha
+}
+```
 
-Creating a file in this directory automatically activates the option in the framework.
+```javascript
+  UPDATE_SINAPRO_CATEGORIA_TITTULO(state , payload) {
+  console.log(payload.nome)
+  state.titulo_sinapro = payload.titulo_sinapro
+  state.sinapro_categoria_titulo = payload
+}
+```
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/vuex-store).
+### exemplos de actions
+
+```javascript
+  actionBegin:function (args){
+    if (args.requestType === "salvar"){
+      console.log(args.data);
+    }
+  }
+}
+```
+
+```javascript
+getUsuario(context) {
+  return api.get(`/usuario`).then(response => {
+    context.commit("UPDATE_USUARIO", response.data);
+    console.log(response.data);
+    context.commit("UPDATE_LOGIN", true);
+  });
+}
+```

@@ -27,11 +27,11 @@
 <script>
 import Vue from 'vue';
 import { TabPlugin } from '@syncfusion/ej2-vue-navigations';
-import grind from '@/components/grind.vue';
+// import grind from '@/components/grind.vue';
 
 Vue.use(TabPlugin);
 export default {
-  components: { grind },
+  // components: { grind },
   name: 'app',
    data: function(){
     return {

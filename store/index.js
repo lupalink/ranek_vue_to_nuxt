@@ -27,31 +27,46 @@ export const state = () => ({
     cidade: "",
     estado: ""
   },
-  usuario_produtos: null
+  usuario_produtos: null,
+  sinapro_categoria_titulo: {
+    id: '',
+    nivel: '',
+    sinapro_id: '', 
+    nome: '',     
+    sinapro: '',
+    nivel_descricao: ''      
+  },
+  sinapro_categoria_item: {
+    id: '',
+    nivel: '',
+    sinapro_id: '', 
+    nome: '',
+    sinapro_numero_item: '',
+    sinapro: '',
+    sinapro_item_cabecalho_id: '',
+    nivel_descricao: '' 
+  },
 })
 export const strict = false
 
-// muda o valor de usuário
-// passando dois arguementos, state para ter acesso aos 
-// atributos e payload que vai mandar as informações que for feito um commit na mutação
 export const mutations = {
-  // CHANGE_USER(state , payload) {
-  //   // console.log(payload.nome)
-  //   state.auth.user.nome = payload.nome
-  //   // state.user.senha = payload.senha
-  // },
+
   CHANGE_USER(state, payload) {
     state.auth.user = Object.assign(state.auth.user, payload);
+  },
+
+  UPDATE_SINAPRO_CATEGORIA_TITTULO(state , payload) {
+    state.sinapro_categoria_titulo = payload
+  },
+  
+  UPDATE_SINAPRO_CATEGORIA_ITEM(state , payload) {
+    state.sinapro_categoria_item = payload
   },
 
   UPDATE_USUARIO: function (state, user) {
     state.auth.user  = user
   },
-  // UPDATE_USUARIO: function (state, user) {
-  //   state.authUser = user
-  // },
 
-  
   ATUALIZA_USUARIO(state, payload) {
     state.usuario = Object.assign(state.usuario, payload);
   },
@@ -62,15 +77,11 @@ export const mutations = {
   SET_POSTS(state, payload){
     state.posts = payload
   },
-  // UPDATE_LOGIN(state, payload) {
-  //   state.login = payload;
-  // },
-  // UPDATE_USUARIO(state, payload) {
-  //   state.auth.user = Object.assign(state.auth.user, payload);
-  // },
+
   UPDATE_USUARIO_PRODUTOS(state, payload) {
     state.usuario_produtos = payload;
   },
+
   ADD_USUARIO_PRODUTOS(state, payload) {
     state.usuario_produtos.unshit(payload);
   }
@@ -83,7 +94,6 @@ export const actions = {
     commit('UPDATE_USUARIO', data)
   },
 
-
   setPost({ commit }, payload) {
     commit('SET_POST', payload)
   },
@@ -94,24 +104,6 @@ export const actions = {
         context.commit("UPDATE_USUARIO_PRODUTOS", response.data);
       });
   },
-  // getUsuario(context) {
-  //   return api.get(`/usuario`).then(response => {
-  //     context.commit("UPDATE_USUARIO", response.data);
-  //     // console.log(response.data);
-  //     // context.commit("UPDATE_LOGIN", true);
-  //   });
-  // },
-
-  getUsuario(context, payload) {
-    // context.commit("ATUALIZA_USUARIO", payload);   
-    return api.get(`/usuario`).then(response => {
-      context.commit("ATUALIZA_USUARIO", response.data);
-      // console.log(response.data);
-      // context.commit("UPDATE_LOGIN", true);
-    });
-
-  },
-
   // ação para criar usuário
   criarUsuario(context, payload) {
     context.commit("ATUALIZA_USUARIO", { id: payload.email });
@@ -138,8 +130,6 @@ export const actions = {
       cidade: "",
       estado: ""
     });
-    // window.localStorage.removeItem("token");
-    // context.commit("UPDATE_LOGIN", false);
   }
 }
 

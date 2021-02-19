@@ -1,4 +1,9 @@
 <template>
+  <!-- 
+    rm(pages): login
+    refactor(pages): login
+    add(pages): login
+  -->
   <section class="login">
     <h1>Login</h1>
     <form>
@@ -17,7 +22,6 @@
 </template>
 
 <script>
-import Notification from '~/components/Notification'
 export default {
   middleware: 'guest',
   data() {
@@ -33,12 +37,12 @@ export default {
       try {
         await this.$auth.loginWith('local', {
           data: {
-            username: this.email,
+            email: this.email,
             password: this.password
           }
         })
         // console.log(this.$auth.$storage.state["token.local"])
-        this.$store.dispatch("getUsuario");
+        // this.$store.dispatch("getUsuario");
         this.$router.push('/usuario/produto')
         
       } catch (error) {

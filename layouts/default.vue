@@ -1,4 +1,9 @@
 <template>
+  <!-- 
+    rm(layouts): default
+    refactor(layouts): default
+    add(layouts): default
+  -->
   <div id="app">
     <TheHeader/>
       <main id="main">
@@ -6,7 +11,7 @@
         <Nuxt />
         </transition>
       </main>
-    <TheFooter/>
+    <!-- <TheFooter/> -->
   </div>
 </template>
 
@@ -48,7 +53,7 @@ img {
 .btn {
   display: block;
   padding: 10px 30px;
-  background: #87f;
+  background: #e3165b;
   border-radius: 4px;
   color: #fff;
   text-align: center;
@@ -61,7 +66,7 @@ img {
 }
 
 .btn:hover {
-  background: #65d;
+  background: #e3165b;
   transform: scale(1.1);
 }
 

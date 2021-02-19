@@ -5,8 +5,8 @@
     rm(view): UsuarioProdutos
   -->
   <section>
-    <h2>Adicionar Produto</h2>
-    <ProdutoAdicionar/>  
+    <h2>Home</h2>
+    <!-- <ProdutoAdicionar/>  
 
     <h2>Seus Produtos</h2>
     <transition-group v-if="usuario_produtos" name="list" tag="ul">
@@ -18,7 +18,7 @@
         </ProdutoItem> 
 
       </li>
-     </transition-group> 
+     </transition-group>  -->
   </section>  
 </template>
 
@@ -54,7 +54,7 @@ export default {
     }
   },
   created() {
-    this.getUsuarioProdutos();
+    // this.getUsuarioProdutos();
   }  
 };
 </script>

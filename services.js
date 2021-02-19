@@ -11,7 +11,7 @@ import axios from "axios";
 const axiosInstance = axios.create({
   // para modo produção
   // baseURL: url + "/api"
-  baseURL: "http://localhost/wp_ranek/wp-json/api",
+  baseURL: "http://127.0.0.1:8000/api/v1/",
 });
 // interceptador
 axiosInstance.interceptors.request.use(
@@ -44,7 +44,7 @@ export const api = {
   login(body){
     // para modo produção
     // return axios.post(url + "/jwt-auth/v1/token", body);
-    return axios.post("http://localhost/wp_ranek/wp-json/jwt-auth/v1/token", body);
+    return axios.post("http://127.0.0.1:8000/api/v1/auth/login", body);
   },
   validateToken(){
     // para modo produção

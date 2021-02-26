@@ -84,3 +84,37 @@ this.UPDATE_SINAPRO_CATEGORIA_ITEM({
   sinapro: 1
 });
 ```
+
+### ação após clicar em editar
+
+```javascript
+if (args.requestType === "beginEdit") {
+}
+```
+
+### ação após clicar em editar ou add
+
+```javascript
+if (args.requestType === "beginEdit" || args.requestType === "add") {
+}
+```
+
+### Exemplo de dados para combobox
+
+```javascript
+  vegetableData: [
+    { Vegetable: 'Cabbage', Category: 'Leafy and Salad', Id: 'item1' },
+    { Vegetable: 'Spinach', Category: 'Leafy and Salad', Id: 'item2' },
+    { Vegetable: 'Wheat grass', Category: 'Leafy and Salad', Id: 'item3' },
+    { Vegetable: 'Yarrow', Category: 'Leafy and Salad', Id: 'item4' },
+    { Vegetable: 'Pumpkins', Category: 'Leafy and Salad', Id: 'item5' },
+    { Vegetable: 'Chickpea', Category: 'Beans', Id: 'item6' },
+    { Vegetable: 'Green bean', Category: 'Beans', Id: 'item7' },
+    { Vegetable: 'Horse gram', Category: 'Beans', Id: 'item8' },
+    { Vegetable: 'Garlic', Category: 'Bulb and Stem', Id: 'item9' },
+    { Vegetable: 'Nopal', Category: 'Bulb and Stem', Id: 'item10' },
+    { Vegetable: 'Anúncio para revista', Category: 'Bulb and Stem', Id: 'item11' }
+  ],
+  dataSource : null,
+  fields : { groupBy: 'nivel_descricao', text: 'nome', value: 'id' }
+```

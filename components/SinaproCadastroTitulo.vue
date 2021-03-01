@@ -34,21 +34,7 @@ Vue.use(DialogPlugin);
 export default {
   data() {
     return {
-      data: null,
-      veiculo: '',
-      servicos_id: '',
-      categoria_sub_filho: '',
-      usuario_id: '',
-      empresa_id: '',
-      id: '',
-      nome: '',
-      categoria_sub_filho_id: '',
-      item: '',
-      valores_id: '',
-      valores_valor: '',
-      categorias: [{
-        categoria_sub_pai: '',
-      }],
+      data: null, 
       erros: [],
       // toolbarOptions: ['Search'], 
       editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' },
@@ -60,9 +46,7 @@ export default {
         immediateModeDelay: 200,      
       },       
       ddldata: null,
-
-      commands: [{ buttonOption: { content: "Selecionar", cssClass: "e-flat" } }]
-      
+      commands: [{ buttonOption: { content: "Selecionar", cssClass: "e-flat" } }]      
     };
   },
   provide: {
@@ -99,7 +83,7 @@ export default {
       if (args.isInteracted) {  
         // const filtro =  this.filtro = args.itemData.value
         if (args.itemData.value == 'TODOS') {
-          this.$refs.grid.clearFiltering();
+         
         } else {
           console.log(args)
           this.$refs.grid.filterByColumn('nome', 'equal', args.itemData.value)         

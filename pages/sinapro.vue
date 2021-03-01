@@ -1,25 +1,25 @@
 <template>
   <!-- 
-    refactor(pages): Usuario
-    add(pages): Usuario
-    rm(pages): Usuario
+    refactor(pages): sinapro
+    add(pages): sinapro
+    rm(pages): sinapro
   -->
   <section class="usuario">
      <nav class="sidenav">
        <h3>Sinapro</h3>
       <ul>
         <li>    
-          <nuxt-link to="/sinapro/inicial">Orçamento</nuxt-link>          
+          <nuxt-link to="/sinapro/tabela">Tabela</nuxt-link>          
         </li>
         <li>
           <nuxt-link to="cadastro">Cadastro</nuxt-link> 
         </li>
         <li>
-          <nuxt-link to="opcoes">Tabela</nuxt-link> 
-        </li>
-         <!-- <li>
-          <nuxt-link to="sinapro">Sinapro</nuxt-link> 
-        </li>      -->
+          <nuxt-link to="single">Detalhes</nuxt-link> 
+        </li> 
+         <li>
+          <nuxt-link to="teste">Testes</nuxt-link> 
+        </li>     
         <li>
           <button @click.prevent="deslogar">Deslogar</button>
         </li>

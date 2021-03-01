@@ -43,7 +43,7 @@ export default {
         })
         // console.log(this.$auth.$storage.state["token.local"])
         // this.$store.dispatch("getUsuario");
-        this.$router.push('/usuario/produto')
+        this.$router.push('/sinapro/tabela')
         
       } catch (error) {
         this.erros.push(error.response.data.message);
@@ -64,7 +64,7 @@ h1 {
   text-align: center;
   font-size: 2rem;
   margin-top: 40px;
-  color: #87f;
+  color: #e3165b;
 }
 
 form {
@@ -84,7 +84,7 @@ form {
 }
 
 .perdeu a:hover {
-  color: #87f;
+  color: #e3165b;
   text-decoration: underline;
 }
 </style>

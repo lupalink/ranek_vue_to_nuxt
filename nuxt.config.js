@@ -38,7 +38,7 @@ export default {
   ],
   auth: {
     redirect: {
-      home: '/'
+      home: 'localhost:3000/sinapro/tabela'
     },
     localStorage: {
       prefix: 'auth.'

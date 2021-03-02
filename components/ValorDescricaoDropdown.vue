@@ -1,5 +1,10 @@
 
 <template>
+  <!-- 
+    refactor(compoments): ValorDescricaoDropdown
+    add(compoments): ValorDescricaoDropdown
+    rm(compoments): UsuaValorDescricaoDropdownrioForm
+  -->
   <ejs-dropdownlist
     name="descricaoValoresDropdown"
     id="dropdownlist"
@@ -8,6 +13,8 @@
     placeholder="Selecione um item"
     :dataSource="valores"
     :fields="fieldsUsers"
+
+    :allowFiltering='true'
   ></ejs-dropdownlist>
 </template>
 

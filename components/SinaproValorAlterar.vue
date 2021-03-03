@@ -1,87 +1,60 @@
 <template>
-  <div style="height: 80vh">
-    <!-- {{todos }} -->
+  <div id="app">
     <ejs-grid
-      ref='grid'
       :dataSource="data"
-      :toolbar="toolbar"
-      :editSettings="editing"
-      :pageSettings="pageSettings"
-      :selectionSettings="selectOptions"
+      :editSettings="editSettings"
       :actionBegin="actionBegin"
-      :actionComplete="actionComplete"
+      :toolbar="toolbar"
+    
     >
-      <e-columns> 
+      <e-columns>  
         <e-column
           field="valor_servico.0.valor_categorias.0.valor_descricao"
           headerText="Descrição do valor"
-          editType='dropdownedit' :edit='countryParams'
-          clipMode="EllipsisWithTooltip"          
+          width="auto"          
+          :editTemplate="editTemplate"
+          
+          
         ></e-column>
-          <e-column
+        <e-column
           field="valor_servico.0.valor"
           headerText="Valor"
           clipMode="EllipsisWithTooltip"
         ></e-column>
-        
       </e-columns>
     </ejs-grid>
   </div>
 </template>
 <script>
-import {mapState, mapMutations} from 'vuex';
 import { api } from "@/services.js";
+import {mapState, mapMutations} from 'vuex';
 import Vue from "vue";
-import {
-  GridPlugin,
-  Edit,
-  Page,
-  Toolbar,
-  ContextMenu,
-} from "@syncfusion/ej2-vue-grids";
-import { Query } from "@syncfusion/ej2-data";
-
+import { GridPlugin, Page, Toolbar, Edit } from "@syncfusion/ej2-vue-grids";
+import { DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
+import ValorDescricaoDropdown from "@/components/ValorDescricaoDropdown.vue";
 
 Vue.use(GridPlugin);
-
-export default ({ 
-  
-  data: () => {
-    return {      
+Vue.use(DropDownListPlugin);
+Vue.prototype.$eventHub = new Vue();
+export default {
+  data() {
+    return {
+      descricaoDoValor: '',    
       data: null,
-      pageSettings: { pageSize: 5 },
-      toolbar: ["Add", "Edit", "Delete", "Update", "Cancel"],
-
-      editing: {
+      editSettings: {
+        allowEditing: true,
         allowAdding: true,
         allowDeleting: true,
-        allowEditing: true,
-        showDeleteConfirmDialog: true,
+        // mode: "Normal"
         mode: 'Dialog'
       },
-      selectOptions: { type: "Multiple" },
-      countryParams: {
-        params: {
-          allowFiltering: true,
-          dataSource: null,  
-          fields: { text: "nome", value: "nome" }, 
-     
-          query: new Query(),
-          actionComplete: () => false,
-        },
-      },
+      
+      toolbar: ["Add", "Edit", "Delete", "Update", "Cancel"]
     };
   },
-  
-
-  provide: {
-    grid: [Edit, Page, Toolbar, ContextMenu],
-  },
-  computed:{
-    ...mapState(["auth", "login", "country"]) 
-  },
-
-  methods:{
+  // computed:{...mapState("valores")},
+  methods: {
+    ...mapMutations(["UPDATE_SINAPRO_VALOR"]),
     getServicos() {
       let id = this.$route.params.id
       api.get(`servicos/buscar?
@@ -95,10 +68,10 @@ export default ({
         &servicos_insercao_controle_id=
         &sinapro_id=1
         &nivel=2`
-      ).then(response => {
-        this.data = response.data.data[0][0]['valor_controles']     
-        console.log(response.data.data[1])         
-        this.countryParams.params.dataSource = response.data.data[1]
+      ).then(response => { 
+        // console.log(response.data.data[0][0]['valor_controles'])
+        this.data = response.data.data[0][0]['valor_controles']    
+        this.UPDATE_SINAPRO_VALOR(response.data.data[1])
       })
       .catch(error => {
         this.erros.push(error.response);
@@ -106,57 +79,86 @@ export default ({
         // console.log(error.data)
       })
     },
-    actionBegin(args) {
-    if ((args.requestType === 'beginEdit' || args.requestType === 'add')) {
-      // console.log(args)
-        for (var i = 0; i < this.$refs.grid.getColumns().length; i++) {
-          if (this.$refs.grid.getColumns()[i].field == "valor_servico.0.valor_categorias.0.valor_descricao") {
-            this.$refs.grid.getColumns()[i].visible = true;
-          }
-          // else if (this.$refs.grid.getColumns()[i].field == "valor_servico.0.valor_categorias.0.valor_descricao") {
-          //   this.$refs.grid.getColumns()[i].visible = false;
-          // }
-        }
+
+    editTemplate: function() {
+      return { template: ValorDescricaoDropdown };
+    },
+    actionBegin: function(args) {
+      if (args.requestType === "beginEdit") {
+        // recebe informação do template child
+        // nos escolhemos o nome
+        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue);
+      
+      }
+      if (args.requestType === "save") {
+        // console.log(args.rowData.valor_servico[0].valor_categoria_id)      
+        // console.log(args.data.valor_servico[0].valor_categorias[0].valor_descricao)
+        // args.data.valor_servico[0].valor_categorias[0].valor_descricao = this.descricaoDoValor; 
+       this.$eventHub.$on("descricaoDoValor", this.getTemplateValue); 
+      if(!this.descricaoDoValor){
+         
+        this.descricaoDoValor = 
+          { id: args.rowData.valor_servico[0].valor_categoria_id}
+        
+        // console.log(this.descricaoDoValor.id )
+      }
+        // this.$eventHub.$on("descricaoDoValorId", this.getTemplateValue); 
+        // console.log( this.descricaoDoValor)
+        // console.log( this.descricaoDoValor.id)
+          
+      // this.erros = [];
+      // console.log(args.data.valor_servico[0].valor)    
+      // console.log(this.$store.state.valores_atualozar.id)
+      // this.categoria_sub_filho = args.categoria_sub_filho
+      // console.log( args.data.categoria_sub_filho)
+
+      api.put(`servicos/atualizar/`,{
+        veiculo: 'sinapro',
+        filtro: 'valor',             
+        usuario_id: 17,
+        empresa_id: 16, 
+        servicos_id: args.data.servico_id,
+        valores_valor_categoria_id: this.descricaoDoValor.id,       
+
+        valores_id: args.rowData.valor_id,
+        valores_valor: args.data.valor_servico[0].valor,  
+
+      })
+      .then((response) => {
+        // console.log(response.data.data)
+        this.getServicos();       
+        // this.$router.push({ name: "usuario-produto" });
+      })
+      .catch(error => {
+        this.erros.push(error.response.data.message);
+        // console.log(error)
+      });
+
+        
       }
     },
-    actionComplete(args) {
-        if ((args.requestType === 'save')) {
-          console.log(args)
-            for (var i = 0; i < this.$refs.grid.getColumns().length; i++) {
-              if (this.$refs.grid.getColumns()[i].field == "valor_servico.0.valor_categorias.0.valor_descricao") {
-                  this.$refs.grid.getColumns()[i].visible = false;
-              }
-              // else if (this.$refs.grid.getColumns()[i].field == "valor_servico.0.valor_categorias.0.valor_descricao") {
-              //     this.$refs.grid.getColumns()[i].visible = true;
-              // }
-            }
-        }
+    getTemplateValue: function(e) {
+      this.descricaoDoValor = e;     
     }
-
   },
 
-  created() {
-    this.getServicos();
+  provide: {
+    grid: [Page, Edit, Toolbar]
   },
-
-
-
-})
-
-window.addEventListener("resize", function () {
-  debugger;
-  if (document.getElementsByClassName("e-grid")[0]) {
-    let gridObj = document.getElementsByClassName("e-grid")[0].ej2_instances[0];
-    gridObj.refresh();
+  created(){
+    this.getServicos()
   }
-});
-
+};
 </script>
 
 <style>
 @import "https://cdn.syncfusion.com/ej2/material.css";
 
-/* .e-pager .e-icon-last::before {
-  content: "\E897";
-} */
+.e-upload:before {
+  content: "\e725";
+}
+.e-icons {
+  color: #e3165b;
+  font-size: 16px;
+}
 </style>

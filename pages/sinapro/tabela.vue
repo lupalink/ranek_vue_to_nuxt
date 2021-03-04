@@ -213,7 +213,6 @@ export default {
         item_sinapro_item_cabecalho_id: 1,
         valores_valor_id: args.data.valor_id,
         valores_valor: args.data.valor
-
       })
       .then((response) => {
 

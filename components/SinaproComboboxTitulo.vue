@@ -36,7 +36,6 @@ export default {
       placeholder: "Descrição do serviço",
       bluebg: "dropdown-bg-blue",
       labelType: "Auto",
-      selectedValue: this.$store.state.sinapro_categoria_titulo.nome,     
       dataSource : null,
       fields : { groupBy: 'nivel_descricao', text: 'nome', value: 'nome' },
       titulo: this.$store.state.sinapro_categoria_titulo.nome,
@@ -60,7 +59,7 @@ export default {
         this.ddldata = lista
         this.dataSource = listaCadastroTitulo;       
         //  this.$refs.comboboxObj.ej2Instances.value = this.value;
-      console.log(listaCadastroTitulo)
+      // console.log(listaCadastroTitulo)
 
         // console.log(this.$store.state.sinapro_categoria_titulo.nome)
       })
@@ -73,8 +72,8 @@ export default {
     onChange: function(args) {
       // console.log(args)
       if (args.isInteracted) {  
-        console.log(args.itemData)   
-        console.log(this.$route.params.id)
+        // console.log(args.itemData)   
+        // console.log(this.$route.params.id)
         this.erros = [];
         api.put(`servicos/atualizar/`,{
           veiculo: 'sinapro',

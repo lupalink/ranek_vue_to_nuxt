@@ -5,12 +5,21 @@
     rm(compoments): SinaproComboboxTitulo
   -->
   <div id="">
+     <ErroNotificacao :erros="erros"/>
     <div id='container' style="margin:0px auto 0; width:100%;">
-        <br>
-        <h4>DESCRIÇÃO DO SERVIÇO</h4>
-        <!-- <h6>Alterar</h6> -->
-        <ejs-combobox ref='comboboxObj' :value='titulo' :dataSource='dataSource' :fields='fields'  popupHeight="200"  popupWidth="100%" :change="onChange" :ignoreAccent='true' :allowCustom='true' v-on:blur='handleBlur' :showClearButton
-='false'></ejs-combobox>
+        <ejs-dropdownlist 
+          ref='comboboxObj'    
+          :dataSource='dataSource'
+          :fields='fields'
+          popupHeight="200"
+          popupWidth="100%"
+          :change="onChange"
+          :ignoreAccent='true'         
+          :allowFiltering='true'
+          v-model="titulo"   
+          :floatLabelType="labelType"          
+          :placeholder="placeholder"       
+        ></ejs-dropdownlist>  
     </div>
   </div>
 </template>
@@ -21,12 +30,17 @@ import { ComboBoxPlugin } from "@syncfusion/ej2-vue-dropdowns";
 Vue.use(ComboBoxPlugin);
 
 export default {
-  data (){
-    
+  data (){    
     return {
+      labelType: "Auto",
+      placeholder: "Descrição do serviço",
+      bluebg: "dropdown-bg-blue",
+      labelType: "Auto",
+      selectedValue: this.$store.state.sinapro_categoria_titulo.nome,     
       dataSource : null,
-      fields : { groupBy: 'nivel_descricao', text: 'nome', value: 'id' },
-      titulo: this.$store.state.sinapro_categoria_titulo.nome
+      fields : { groupBy: 'nivel_descricao', text: 'nome', value: 'nome' },
+      titulo: this.$store.state.sinapro_categoria_titulo.nome,
+      erros: [],
     }   
   },
   methods:{
@@ -35,7 +49,7 @@ export default {
       api.get(`servicos/buscar?veiculo=sinapro&filtro=servico&usuario_id=17&servicos_praca_id=7&servicos_insercao_id=7&sinapro_id=1&empresa_id=16&nivel=2`).then(response => {
         let lista = [];
         let listaCadastroTitulo = [];
-     
+
         // lista.push('TODOS');   
         response.data.sinapro_categoria.forEach((item) => {     
         
@@ -44,9 +58,11 @@ export default {
           
         })    
         this.ddldata = lista
-        this.dataSource = listaCadastroTitulo;
-        // console.log(this.nomeData)
- 
+        this.dataSource = listaCadastroTitulo;       
+        //  this.$refs.comboboxObj.ej2Instances.value = this.value;
+      console.log(listaCadastroTitulo)
+
+        // console.log(this.$store.state.sinapro_categoria_titulo.nome)
       })
       .catch(error => {
         this.erros.push(error.response.data.message);
@@ -57,51 +73,37 @@ export default {
     onChange: function(args) {
       // console.log(args)
       if (args.isInteracted) {  
-        // console.log(args.itemData)    
-        if (args.itemData === null){
-          this.$refs.comboboxObj.ej2Instances.value = this.$store.state.sinapro_categoria_titulo.nome;
-        }else {
-          // console.log(args.itemData)
-          // var numerosPermitidos = new Array("15", "457", "330", "13", "54", "589");
-          //   if(numerosPermitidos.indexOf("15") != -1)
-          // {  
-          //   alert("encontrei");
-          // }
-        }        
-        
-        // console.log(args.previousItemData)
-        // if (args.itemData === null) {
+        console.log(args.itemData)   
+        console.log(this.$route.params.id)
+        this.erros = [];
+        api.put(`servicos/atualizar/`,{
+          veiculo: 'sinapro',
+          filtro: 'titulo_detalhe',             
+          usuario_id: 17,
+          empresa_id: 16,
+          servicos_id: this.$route.params.id,
+          categoria_subs_categoria_pai_id: args.itemData.id,  
+        })
+        .then((response) => {
+
+          console.log(response.data)        
+          this.$refs.comboboxObj.ej2Instances.focusOut();
             
-        //   // (this.$refs.comboboxObj.getDataByValue('Vegetable', 'equal', Cabbage)())
-        //   // this.$refs.comboboxObj.getDataByValue('Vegetable', 'equal', 'Yarrow')
-        //   // this.$refs.comboboxObj.ej2Instances.value = 'Yarrow';
-        //   // this.$refs.comboboxObj.filter('Yarrow')
-        //   // console.log(this.$refs.comboboxObj.filtering('Vegetable', 'equal', Cabbage)())
-        //   // console.log(this.$refs.comboboxObj.value);
-       
-        //   // alert('chegou')
-        // } else {
-        //   this.$refs.comboboxObj.ej2Instances.value = 'Yarrow';
-        //   console.log(args.itemData )
-          // let r =Number.isInteger(r)
-          // console.log(Number.isInteger(r))
-
-          // if(!Number.isInteger(r)){
-          //   this.$refs.comboboxObj.ej2Instances.value = 'Yarrow';
-          // }
+          // this.getServicos();
+          // this.$store.dispatch("getUsuario");
+          // this.$router.push({ name: "usuario-produto" });
+        })
+        .catch(error => {
+          this.erros.push(error.response.data.message);
+          // console.log(error)
           
-          //  console.log(this.$refs.comboboxObj.value = '12')
-          //  this.$refs.comboboxObj.value = '12'
-        // }      
+        }); 
       }      
-    },
-    handleBlur(e) {
-      // console.log(this.$refs.comboboxObj.ej2Instances.value)
     }
-
   },
   created(){
     this.getServicos();
+ 
   }
  
 

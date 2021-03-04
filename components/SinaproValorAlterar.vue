@@ -1,4 +1,9 @@
 <template>
+  <!-- 
+    refactor(compoments): SinaproValorAlterar
+    add(compoments): SinaproValorAlterar
+    rm(compoments): SinaproValorAlterar
+  -->
   <div id="app">
     <ejs-grid
       :dataSource="data"
@@ -97,8 +102,7 @@ export default {
        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue); 
       if(!this.descricaoDoValor){
          
-        this.descricaoDoValor = 
-          { id: args.rowData.valor_servico[0].valor_categoria_id}
+        this.descricaoDoValor = { id: args.rowData.valor_servico[0].valor_categoria_id}
         
         // console.log(this.descricaoDoValor.id )
       }

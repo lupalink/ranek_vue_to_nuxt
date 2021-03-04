@@ -8,8 +8,19 @@
     <div id='container' style="margin:0px auto 0; width:100%;">
         <br>
         <!-- <h4>DESCRIÇÃO DO ITEM</h4> -->        
-        <ejs-dropdownlist ref='comboboxObj' id='comboboxItem' :dataSource='dataSource' :fields='fields' popupHeight="200" :change="onChange"  :ignoreAccent='true' :allowCustom='true' v-on:blur='handleBlur' :allowFiltering='true' v-model='item' :floatLabelType="labelType"          
-          :placeholder="placeholder" ></ejs-dropdownlist>
+        <ejs-dropdownlist ref='comboboxObjs'
+         id='comboboxItem'
+         :dataSource='dataSource'
+         :fields='fields'
+         popupHeight="200"
+         :change="onChange"
+         :ignoreAccent='true'
+         :allowCustom='true' 
+         :allowFiltering='true' 
+         v-model='item' 
+         :floatLabelType="labelType"          
+         :placeholder="placeholder"
+        ></ejs-dropdownlist>
     </div>
   </div>
 </template>
@@ -55,14 +66,41 @@ export default {
         this.erros.push(error.response.data.message);
         // console.log(error)
       })
-    },   
+    }, 
+    onChange: function(args) {
+      // console.log(args)
+      if (args.isInteracted) {  
+        // console.log(args.itemData)   
+        // console.log(this.$route.params.id)
+        this.erros = [];
+        api.put(`servicos/atualizar/`,{
+          veiculo: 'sinapro',
+          filtro: 'item_detalhe',             
+          usuario_id: 17,
+          empresa_id: 16,
+          servicos_id: this.$route.params.id,
+          categoria_subs_categoria_filho_id: args.itemData.id,  
+        })
+        .then((response) => {
+
+          console.log(response.data)        
+          this.$refs.comboboxObjs.ej2Instances.focusOut();
+            
+          // this.getServicos();
+          // this.$store.dispatch("getUsuario");
+          // this.$router.push({ name: "usuario-produto" });
+        })
+        .catch(error => {
+          this.erros.push(error.response.data.message);
+          // console.log(error)
+          
+        }); 
+      }      
+    }  
   },
   created(){
     this.getServicos();
   }
- 
-
-  
   
 }
 </script>

@@ -46,6 +46,12 @@ export const state = () => ({
     sinapro_item_cabecalho_id: '',
     nivel_descricao: '' 
   },
+  sinapro_servico: {
+    id: '',
+  },
+  valores: [],
+  alterar_valores: null,
+  valores_atualizar: null,
 })
 export const strict = false
 
@@ -55,8 +61,26 @@ export const mutations = {
     state.auth.user = Object.assign(state.auth.user, payload);
   },
 
+  //   UPDATE_SINAPRO_VALOR(state, payload) {
+  //     state.valores.push(payload)
+  //  },
+
+  //verificar como vai ficar
+  UPDATE_SINAPRO_VALOR(state, payload) {
+    state.valores = (payload)
+    state.alterar_valores = (payload)
+  },
+
+  UPDATE_SINAPRO_VALORES_ATUALIZAR(state, payload) {
+    state.valores_atualizar = (payload)
+  },
+
   UPDATE_SINAPRO_CATEGORIA_TITTULO(state , payload) {
     state.sinapro_categoria_titulo = payload
+  },
+
+  UPDATE_SINAPRO_SERVICO(state , payload) {
+    state.sinapro_servico = payload
   },
   
   UPDATE_SINAPRO_CATEGORIA_ITEM(state , payload) {

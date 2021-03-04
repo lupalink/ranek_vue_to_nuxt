@@ -99,7 +99,8 @@ textarea {
   transition: all 0.3s;
   font-size: 1rem;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
+   /* margin-bottom: 15px; */
   width: 100%;
 }
 

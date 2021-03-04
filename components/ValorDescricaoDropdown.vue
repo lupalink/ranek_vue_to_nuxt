@@ -12,25 +12,32 @@
     :change="doCustomAction.bind(this)"
     placeholder="Selecione um item"
     :dataSource="valores"
-    :fields="fieldsUsers"
-
+    :fields="fieldsValores"
     :allowFiltering='true'
   ></ejs-dropdownlist>
 </template>
 
 <script>
+import {mapState, mapMutations} from 'vuex';
 export default {
   data() {
     return {
-      valores: this.$store.state.valores,
-      fieldsUsers: { text: "nome", value: "nome" }
+      valores: this.$store.state.alterar_valores,
+      fieldsValores: { text: "nome", value: "nome" }
     };
   },
   methods: {
+    ...mapMutations(["UPDATE_SINAPRO_VALORES_ATUALIZAR"]),
+
     doCustomAction: function(args) {
-      // console.log(args);
-      console.log(args.value);
+      // console.log(args.itemData);
+
+        //formato original
+        // this.$eventHub.$emit("descricaoDoValor", args.value);
       this.$eventHub.$emit("descricaoDoValor", args.value);
+       this.$eventHub.$emit("descricaoDoValor", args.itemData);
+      //  this.$eventHub.$emit("descricaoDoValorId", args.itemData);
+      // this.UPDATE_SINAPRO_VALORES_ATUALIZAR(args.itemData)
     },
   },
   };

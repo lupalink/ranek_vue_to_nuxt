@@ -125,7 +125,7 @@ export default {
         sinapro_id: this.sinapro_categoria_titulo.sinapro_id,      
         nome: args.data.nome,
         sinapro_numero_item: args.data.sinapro_numero_item,
-        nivel_descricao: 'SINAPRO',
+        nivel_descricao: this.$store.state.sinapro_categoria_titulo.nome,
         sinapro_item_cabecalho_id: 1,  
         sinapro: true,        
       })

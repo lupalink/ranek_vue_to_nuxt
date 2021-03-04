@@ -11,8 +11,10 @@
         <e-column
           field="valor_servico.0.valor_categorias.0.valor_descricao"
           headerText="Descrição do valor"
-          width="auto"
+          width="auto"          
           :editTemplate="editTemplate"
+          
+          
         ></e-column>
         <e-column
           field="valor_servico.0.valor"
@@ -43,8 +45,10 @@ export default {
         allowEditing: true,
         allowAdding: true,
         allowDeleting: true,
-        mode: "Normal"
+        // mode: "Normal"
+        mode: 'Dialog'
       },
+      
       toolbar: ["Add", "Edit", "Delete", "Update", "Cancel"]
     };
   },
@@ -112,7 +116,7 @@ export default {
   content: "\e725";
 }
 .e-icons {
-  color: #00ffff;
+  color: #e3165b;
   font-size: 16px;
 }
 </style>

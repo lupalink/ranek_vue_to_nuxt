@@ -12,9 +12,9 @@
       </ejs-dropdownlist>
     </div> 
       <!-- {{this.$store.state.titulo_sinapro.titulo_sinapro}} -->
-      <ejs-grid ref='grid' :dataSource='data' :allowFiltering='true' height='273px' :filterSettings='filterOptions' :toolbar='toolbar' id='SinaproCadastroTitulo' :commandClick="commandClick"  :editSettings='editSettings' :actionBegin='actionBegin'>  
+      <ejs-grid ref='grid' :dataSource='data' :allowFiltering='true' height='273px' :filterSettings='filterOptions' :toolbar='toolbar' id='SinaproCadastroTitulo' :commandClick="commandClick"  :editSettings='editSettings' :actionBegin='actionBegin' :actionComplete='actionComplete'>  
         <e-columns>          
-          <e-column field='sinapro_id' headerText='Sinapro ID' textAlign='Right' width=50></e-column>
+          <e-column field='sinapro_id' headerText='Sinapro ID' textAlign='Right' width=50 :isPrimaryKey='true'></e-column>
           <e-column field='nome' headerText='Serviço' width=120></e-column>
           <e-column headerText="" width="150" :commands="commands"></e-column>    
         </e-columns>
@@ -34,6 +34,7 @@ Vue.use(DialogPlugin);
 export default {
   data() {
     return {
+      modeSave: null,
       data: null, 
       erros: [],
       // toolbarOptions: ['Search'], 
@@ -79,27 +80,17 @@ export default {
       })
     },   
     onChange: function(args) {
-      let element = document.createElement('p');
-      if (args.isInteracted) {  
-        // const filtro =  this.filtro = args.itemData.value
-        if (args.itemData.value == 'TODOS') {
-         
+      if (args.isInteracted) {         
+        if (args.itemData.value == 'TODOS') {         
         } else {
           console.log(args)
           this.$refs.grid.filterByColumn('nome', 'equal', args.itemData.value)         
         }      
       } 
     },
-
     actionBegin: function(args) { 
     if (args.requestType === "save") { 
-      // console.log(args.data.nome); 
-      // this.UPDATE_SINAPRO_CATEGORIA_TITTULO({  
-      //   nivel: 2,
-      //   sinapro_id: args.data.sinapro_id, 
-      //   nome: args.data.nome,
-      //   sinapro: 1,
-      // })  
+      if(this.modeSave === true){    
       this.erros = [];  
       api.post(`/servicos`,
       { 
@@ -126,9 +117,49 @@ export default {
         // console.log(error)
         
       }); 
+      } else {
+        api.put(`/servicos/atualizar`,{ 
+        veiculo: "sinapro",
+	      filtro: "titulo",
+        usuario_id: 17,
+        empresa_id: 17,
+        id: args.data.id,
+        nivel: 2,
+        sinapro_id: args.data.sinapro_id,      
+        nome: args.data.nome,
+        nivel_descricao: 'SINAPRO',
+        sinapro: true,        
+      }) 
+      .then(() => {
+        this.getServicos();
+        this.$refs.grid.filterByColumn('nome', 'equal', args.data.nome) 
+        // this.$refs.grid.filterByColumn('nome', 'equal', this.$store.state.sinapro_categoria_titulo.nome) 
+        // this.$store.dispatch("getUsuario");
+        // this.$router.push({ name: "usuario-produto" });
+      })
+      .catch(error => {
+        this.erros.push(error.response.data.message);
+        // console.log(error)
+        
+      }); 
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+      
     } else if (args.requestType === "delete") { 
        // console.log(args.data.servico_id)
-        console.log(args.data[0]['servico_id'])
+      //  alert('chegou aqui')
+        // console.log(args.data[0]['servico_id'])
        // // alert(args.data.servico_id);      
       }
     },
@@ -159,7 +190,23 @@ export default {
         nome: args.rowData.nome,
         sinapro: 1,
       })   
-    }
+    },
+    actionComplete(args) {
+    if (args.requestType === 'beginEdit') {
+      this.modeSave = false
+      console.log(this.modeSave)
+    } else if (args.requestType === 'add') {
+      this.modeSave = true
+      console.log(this.modeSave)
+
+      // (args.form.elements.namedItem('CustomerID')).focus();
+      } else if (args.requestType === 'cancel') {
+      this.modeSave = null
+      console.log(this.modeSave)
+
+      // (args.form.elements.namedItem('CustomerID')).focus();
+      }
+   }
   },
   created() {
     this.getServicos();

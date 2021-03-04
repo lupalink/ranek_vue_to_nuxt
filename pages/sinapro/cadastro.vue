@@ -46,12 +46,19 @@ export default {
   data(){
     return {
       erros: [],
+      servico_id: 'teste',      
     }
   },
   computed: {
-    ...mapState(['sinapro_categoria_item', 'sinapro_categoria_titulo'])
+    ...mapState(['sinapro_categoria_item', 'sinapro_categoria_titulo', 'sinapro_servico'],
+    ),
+    id(id_servico) {
+      var id_servico = this.$store.state.sinapro_servico
+      return id_servico;
+    },
   },
   methods: {
+    ...mapMutations(["UPDATE_SINAPRO_CATEGORIA_ITEM", "UPDATE_SINAPRO_VALOR", "UPDATE_SINAPRO_SERVICO"]),
     
     salvarRegistro(){
       //  debugger;
@@ -70,14 +77,69 @@ export default {
         servicos_observacao: ''
       })
       .then((response) => {
-        console.log(response.data)
-        this.$router.push({ name: "sinapro-opcoes" });
+        this.servico_id = response.data.data['servico'].servicos_id
+        // console.log(this.servico_id)
+        // console.log(response.data.data['servico'].servicos_id)
+        this.UPDATE_SINAPRO_SERVICO(response.data.data['servico'].servicos_id)
+        // this.$router.push({ name: "sinapro-opcoes" });
+        // this.erros.push(error.response.data.message);
+        this.SalvarValores()
+      })
+      .catch(error => {
+        this.erros.push(error.response.data.message);
+      })
+    
+      
+       
+      
+      
+      // console.log(this.servico_id)
+    
+      // api.post(`/servicos`,
+      // {
+      //   veiculo: "sinapro",
+	    //   filtro: "valor",
+      //   usuario_id: 17,
+      //   // servicos_insercao_id: 7,
+      //   // servicos_insercao_controle_id: 54,
+
+      //   servicos_id: this.$store.state.sinapro_servico,
+      //   valores: this.$store.state.valores,
+
+      // })
+      // .then((response) => {
+      //   console.log(response.data.data)
+      //   // this.UPDATE_SINAPRO_SERVICO(response.data.data)
+      //   // this.$router.push({ name: "sinapro-opcoes" });
+      //   // this.erros.push(error.response.data.message);
+      // })
+      // .catch(error => {
+      //   this.erros.push(error.response.data.message);
+      // });
+    },
+    SalvarValores(){
+    console.log(this.$store.state.sinapro_servico)
+      api.post(`/servicos`,
+      {
+        veiculo: "sinapro",
+	      filtro: "valor",
+        usuario_id: 17,
+        // servicos_insercao_id: 7,
+        // servicos_insercao_controle_id: 54,
+
+        servicos_id: this.$store.state.sinapro_servico,
+        valores: this.$store.state.valores,
+
+      })
+      .then((response) => {
+        console.log(response.data.data)
+        // this.UPDATE_SINAPRO_SERVICO(response.data.data)
+        // this.$router.push({ name: "sinapro-opcoes" });
         // this.erros.push(error.response.data.message);
       })
       .catch(error => {
         this.erros.push(error.response.data.message);
       });
-
     }
   },
   created(){

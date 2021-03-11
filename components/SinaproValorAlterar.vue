@@ -18,8 +18,6 @@
           headerText="Descrição do valor"
           width="auto"          
           :editTemplate="editTemplate"
-          
-          
         ></e-column>
         <e-column
           field="valor_servico.0.valor"
@@ -37,13 +35,14 @@ import Vue from "vue";
 import { GridPlugin, Page, Toolbar, Edit } from "@syncfusion/ej2-vue-grids";
 import { DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
 import ValorDescricaoDropdown from "@/components/ValorDescricaoDropdown.vue";
-
 Vue.use(GridPlugin);
 Vue.use(DropDownListPlugin);
 Vue.prototype.$eventHub = new Vue();
 export default {
   data() {
     return {
+      idParamter: this.$route.params.id,
+      addNew: false,
       descricaoDoValor: '',    
       data: null,
       editSettings: {
@@ -59,7 +58,7 @@ export default {
   },
   // computed:{...mapState("valores")},
   methods: {
-    ...mapMutations(["UPDATE_SINAPRO_VALOR"]),
+    ...mapMutations(["UPDATE_SINAPRO_VALOR", "UPDATE_SINAPRO_VALOR_DESCRICAO_DROPDOWNLIST"]),
     getServicos() {
       let id = this.$route.params.id
       api.get(`servicos/buscar?
@@ -73,79 +72,123 @@ export default {
         &servicos_insercao_controle_id=
         &sinapro_id=1
         &nivel=2`
-      ).then(response => { 
-        // console.log(response.data.data[0][0]['valor_controles'])
+      ).then(response => {    
         this.data = response.data.data[0][0]['valor_controles']    
         this.UPDATE_SINAPRO_VALOR(response.data.data[1])
+        this.UPDATE_SINAPRO_VALOR_DESCRICAO_DROPDOWNLIST(response.data.data[1])
+
+
       })
       .catch(error => {
         this.erros.push(error.response);
-            // this.erros.push(error.response.data.message);
-        // console.log(error.data)
+   
       })
     },
-
     editTemplate: function() {
       return { template: ValorDescricaoDropdown };
     },
     actionBegin: function(args) {
-      if (args.requestType === "beginEdit") {
-        // recebe informação do template child
-        // nos escolhemos o nome
-        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue);
+      if (args.requestType === "add") {        
       
+        this.addNew = true
+      
+        
       }
-      if (args.requestType === "save") {
-        // console.log(args.rowData.valor_servico[0].valor_categoria_id)      
-        // console.log(args.data.valor_servico[0].valor_categorias[0].valor_descricao)
-        // args.data.valor_servico[0].valor_categorias[0].valor_descricao = this.descricaoDoValor; 
+      if (args.requestType === "beginEdit") {  
+        this.addNew = false
+        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue);      
+      }
+
+      if (args.requestType === "save" && this.addNew === false) {
+        console.log('vai atualizar')
        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue); 
-      if(!this.descricaoDoValor){
-         
-        this.descricaoDoValor = { id: args.rowData.valor_servico[0].valor_categoria_id}
+       console.log(this.descricaoDoValor)
+     
+      
+       if(!this.descricaoDoValor){         
+          this.descricaoDoValor = { id: args.rowData.valor_servico[0].valor_categoria_id}     
+        }
+        // console.log(args.data)
+        api.put(`servicos/atualizar/`,{
+          veiculo: 'sinapro',
+          filtro: 'valor',             
+          usuario_id: 17,
+          empresa_id: 16, 
+          servicos_id: args.data.servico_id,
+          valores_valor_categoria_id: this.descricaoDoValor.id,       
+          valores_id: args.rowData.valor_id,
+          valores_valor: args.data.valor_servico[0].valor,  
+        })
+        .then((response) => { 
+          this.getServicos();      
+        })
+        .catch(error => {
+          this.erros.push(error.response.data.message);
+        });
+
+      }else if (args.requestType === "save" && this.addNew === true) {
+        // console.log
+        this.$eventHub.$on("descricaoDoValor", this.getTemplateValue);  
+        console.log(this.descricaoDoValor)
+        // if(!this.descricaoDoValor){         
+        //   this.descricaoDoValor = { id: args.rowData.valor_servico[0].valor_categoria_id}   
+            
+        // }    
+        let id = this.$route.params.id
+        console.log(args.data.valor_servico[0].valor)
+        // console.log(this.descricaoDoValor)
+            console.log('id da descrição dos valores', this.$store.state.valor_descricao.id)
+
+
+        api.post(`servicos`,{
+          veiculo: 'sinapro',
+          filtro: 'valor_objeto',             
+          usuario_id: 17,
+          empresa_id: 16, 
+          servicos_id: id,
+          valores_valor_categoria_id: this.$store.state.valor_descricao.id,       
+          valores_valor: args.data.valor_servico[0].valor,  
+        })
+        .then((response) => { 
+          console.log(response)
+          this.getServicos();      
+        })
+        .catch(error => {
+          this.erros.push(error.response.data.message);
+        });
+
         
-        // console.log(this.descricaoDoValor.id )
-      }
-        // this.$eventHub.$on("descricaoDoValorId", this.getTemplateValue); 
-        // console.log( this.descricaoDoValor)
-        // console.log( this.descricaoDoValor.id)
-          
-      // this.erros = [];
-      // console.log(args.data.valor_servico[0].valor)    
-      // console.log(this.$store.state.valores_atualozar.id)
-      // this.categoria_sub_filho = args.categoria_sub_filho
-      // console.log( args.data.categoria_sub_filho)
-
-      api.put(`servicos/atualizar/`,{
-        veiculo: 'sinapro',
-        filtro: 'valor',             
-        usuario_id: 17,
-        empresa_id: 16, 
-        servicos_id: args.data.servico_id,
-        valores_valor_categoria_id: this.descricaoDoValor.id,       
-
-        valores_id: args.rowData.valor_id,
-        valores_valor: args.data.valor_servico[0].valor,  
-
-      })
-      .then((response) => {
-        // console.log(response.data.data)
-        this.getServicos();       
-        // this.$router.push({ name: "usuario-produto" });
-      })
-      .catch(error => {
-        this.erros.push(error.response.data.message);
-        // console.log(error)
-      });
-
-        
+      }else if (args.requestType === "delete") {
+        console.log(this.idParamter)
+        console.log(args.data[0].valor_id)
+        api
+        .delete(`servicos/deletar?
+        veiculo=sinapro
+        &filtro=valor_objeto
+        &usuario_id=17
+        &servicos_id=${this.idParamter}
+        &valores_valor_id=${args.data[0].valor_id}
+        &arquivar=0
+        &restaurar=0
+        &remover=1`)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch(error => {
+          // console.log(error.reponse);
+        });
       }
     },
+
+
+
+
+
+
     getTemplateValue: function(e) {
       this.descricaoDoValor = e;     
     }
   },
-
   provide: {
     grid: [Page, Edit, Toolbar]
   },
@@ -157,7 +200,6 @@ export default {
 
 <style>
 @import "https://cdn.syncfusion.com/ej2/material.css";
-
 .e-upload:before {
   content: "\e725";
 }

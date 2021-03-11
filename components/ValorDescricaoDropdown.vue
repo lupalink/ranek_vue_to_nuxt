@@ -27,20 +27,14 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["UPDATE_SINAPRO_VALORES_ATUALIZAR"]),
-
-    doCustomAction: function(args) {
-      // console.log(args.itemData);
-
-        //formato original
-        // this.$eventHub.$emit("descricaoDoValor", args.value);
-      this.$eventHub.$emit("descricaoDoValor", args.value);
-       this.$eventHub.$emit("descricaoDoValor", args.itemData);
-      //  this.$eventHub.$emit("descricaoDoValorId", args.itemData);
-      // this.UPDATE_SINAPRO_VALORES_ATUALIZAR(args.itemData)
-    },
+    ...mapMutations(["UPDATE_SINAPRO_VALOR_DESCRICAO"]),
+    doCustomAction: function(args) {       
+      this.$eventHub.$emit("descricaoDoValor", args.itemData);
+     this.UPDATE_SINAPRO_VALOR_DESCRICAO(args.itemData)
+      console.log(args.itemData)
+    }
   },
-  };
+};
 </script>
 
 <style>

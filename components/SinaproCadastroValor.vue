@@ -5,226 +5,116 @@
     add(components): SinaproCadastroValor
   -->
   <div id="apps" >   
-    {{temp}}
     <ErroNotificacao :erros="erros"/> 
-    <!-- <h3>{{this.$store.state.sinapro_categoria_titulo.nome}}</h3>      -->
     <ejs-grid
     :dataSource='data'
     ref='grid'
-
+    :sortSettings='sortInit'
+    :allowSorting='true'
     height='273px' 
-
+    :rowSelected='rowSelected'
     :toolbar='toolbar' 
     :editSettings='editSettings' 
     :actionBegin='actionBegin'
-    :actionComplete='actionComplete'
-    :toolbarClick='toolbarClick'>  
+    :actionComplete='actionComplete' 
+    >
       <e-columns> 
         <e-column field='valor_categoria_id' headerText='Descrição do valor' textAlign='Right' width=50 ></e-column>
-        <e-column field='valores_valor' headerText='Valor' width=120></e-column>
-        <!-- <e-column headerText="" width="150" :commands="commands"></e-column> -->
+        <e-column field='valores_valor' headerText='Valor' width=120></e-column>      
       </e-columns>
     </ejs-grid>
   </div>
 </template>
 <script>
-import {mapState, mapMutations} from 'vuex';
-import { api } from "@/services.js";
+import {mapState, mapMutations, mapActions} from 'vuex';
 import Vue from "vue";
-import { GridPlugin, Filter, Toolbar, Search, Edit, CommandColumn} from "@syncfusion/ej2-vue-grids";
+import { GridPlugin, Sort, Filter, Toolbar,  Edit} from "@syncfusion/ej2-vue-grids";
 import { DropDownListPlugin} from "@syncfusion/ej2-vue-dropdowns";
 Vue.use(GridPlugin);
 Vue.use(DropDownListPlugin);
 export default {
   data() {
     return {
-      data: '',  
+      modeSave: false,     
+      sortInit: { 
+        columns: [
+          { field: 'valor_categoria_id', direction: 'Ascending' },
+          { field: 'valores_valor', direction: 'Ascending' },
+      ]},
+      // Descending
+      addNew: false,
+      data: null,    
+      index: null,
       erros: [],
-      editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' },
-      toolbar: [ 'Add', 'Edit', 'Delete', 'Update', 'Cancel', {text: 'Finalziar cadastro', tooltipText: 'Finalziar cadastro', id: 'toolbarfilter', align:'Right'}],
-      
-      // toolbarOptions: ['Search'], 
-      formatOptions: { format:'C2', currency:'BRL' },
-       filterOptions: {
-        ignoreAccent: true,
-        mode: 'Immediate',
-        immediateModeDelay: 200,      
-      }, 
-      commands: [{ buttonOption: { content: "Selecionar", cssClass: "e-flat" } }],
-      ddldata: null,
-      temp: ''
+      editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog'},
+      toolbar: [ 'Add', 'Edit', 'Delete', 'Update', 'Cancel'],  
     };
   },
   provide: {
-    grid: [Toolbar, Search, Edit, CommandColumn]
+    grid: [Toolbar, Edit, Sort]
   },
   computed: {
-    ...mapState(['auth', 'login', 'sinapro_categoria_item', 'sinapro_categoria_titulo', 'valores'])   
+    ...mapState(['auth', 'login', 'sinapro_categoria_item', 'sinapro_categoria_titulo', 'valores']),    
   },
   methods: {
-    ...mapMutations(["UPDATE_SINAPRO_CATEGORIA_ITEM", "UPDATE_SINAPRO_VALOR"]),
-    toolbarClick: function (args) {
-      if (args.item.id === 'toolbarfilter') {
-        // this.$refs.treegrid.filterByColumn('taskName', 'startswith', 'Testing');
-        // console.log(this.$refs.grid.ej2Instances.currentViewData)
-      }
+    ...mapMutations(["UPDATE_SINAPRO_CATEGORIA_ITEM", "UPDATE_SINAPRO_VALOR", "remove"]),  
+    ...mapActions(["removeTodo", "updateTodo"]), 
+    excluirRegistro(){
+      this.remove(0)
     },
-    salvarRegistro(){
-      // console.log(this.$refs.grid.ej2Instances.currentViewData); 
-      let lista = [];
-      this.$refs.grid.ej2Instances.currentViewData.forEach((item) => {     
-        // console.log(item);
-          // listaCadastroTitulo.push(item);
-          lista.push(item);
-          
-        })    
-        this.temp = lista
-        this.UPDATE_SINAPRO_VALOR(this.temp)
-        // this.data = listaCadastroTitulo;
-
+    rowSelected: function(args) {
+      console.log(this.index = args.row.getAttribute('aria-rowindex'))
     },
-
-
-    getServicos() {
-      api.get(`servicos/buscar?veiculo=sinapro&filtro=servico&usuario_id=17&servicos_praca_id=7&servicos_insercao_id=7&sinapro_id=1&empresa_id=16&nivel=3`).then(response => {
-        let lista = [];
-        let listaCadastroTitulo = [];
-     
-        lista.push('TODOS');   
-        response.data.sinapro_categoria.forEach((item) => {     
-        
-          listaCadastroTitulo.push(item);
-          lista.push(item.nome);
-          
-        })    
-        this.ddldata = lista
-        this.data = listaCadastroTitulo;
- 
-      })
-      .catch(error => {
-        this.erros.push(error.response.data.message);
-        // console.log(error)
-      })
-    },
-    onChange: function(args) {
-      let element = document.createElement('p');
-      if (args.isInteracted) {  
-        // const filtro =  this.filtro = args.itemData.value
-        // console.log(this.filtro)        
-        if (args.itemData.value == 'TODOS') {
-          this.$refs.grid.clearFiltering();
-        } else {
-          this.$refs.grid.filterByColumn('nome', 'equal', args.itemData.value)
-        }      
-      } 
-    },
+      
     actionComplete: function (e) { 
-      if (e.requestType === 'save') { 
-        this.UPDATE_SINAPRO_VALOR(this.$refs.grid.ej2Instances.currentViewData)
-        //  console.log(this.$refs.grid.ej2Instances.currentViewData)
-      // here you can get all the data after updating 
-      //  console.log(e); 
-      //  console.log(this.$refs.grid.ej2Instances); 
-      }else if(e.requestType === 'delete') {
-       this.UPDATE_SINAPRO_VALOR(this.$refs.grid.ej2Instances.currentViewData)
+      if (e.requestType === 'save') {        
+        // console.log(e.data)
+      } else if(e.requestType === 'delete') {
+
+      } else if(e.requestType === "beginEdit") {
+        this.addNew = false
+        console.log('atualização. add = ', this.addNew = false)
       }
     }, 
     actionBegin: function(args) { 
-      
-    if (args.requestType === "save") {      
-      this.erros = [];    
-      
-      // console.log(this.$refs.grid.ej2Instances); 
-      // this.UPDATE_SINAPRO_VALOR({ 
-      //   valor_categoria_id: args.data.valor_categoria_id,
-      //   valores_valor: args.data.valores_valor
-      // })
-      // console.log(args)
-      
-        // this.UPDATE_SINAPRO_VALOR(args.data)
-    
-
-
-
-
-
-
-      // api.post(`/servicos`,
-      // { 
-      //   veiculo: "sinapro",
-	    //   filtro: "titulo",
-      //   usuario_id: 17,
-      //   servicos_insercao_id: 7,
-      //   servicos_insercao_controle_id: 54,
-
-      //   nivel: 3,
-      //   sinapro_id: this.sinapro_categoria_titulo.sinapro_id,      
-      //   nome: args.data.nome,
-      //   sinapro_numero_item: args.data.sinapro_numero_item,
-      //   nivel_descricao: 'SINAPRO',
-      //   sinapro_item_cabecalho_id: 1,  
-      //   sinapro: true,        
-      // })
-      // .then((r) => {
-      //   this.getServicos();                               
-      //   // this.$refs.grid.filterByColumn('nome', 'equal', this.sinapro_categoria_item[0].nome)
-      //   this.$refs.grid.filterByColumn('nome', 'equal', args.data.nome) 
-      // })
-      // .catch(error => {
-      //   this.erros.push(error.response.data.message);
-      //   // console.log(error)
-      // }); 
-    } else if (args.requestType === "delete") { 
-        
-      
-      // console.log(args)
-       // console.log(args.data.servico_id)
-        // console.log(args.data[0]['servico_id'])
-       // // alert(args.data.servico_id);      
-        
-      }
+      this.erros = [];
+      if (args.requestType === "save") {
+        // se estiver adicionando novos valores
+        if (this.addNew === true){
+          this.UPDATE_SINAPRO_VALOR({
+            valor_categoria_id: args.data.valor_categoria_id,
+            valores_valor: args.data.valores_valor
+          })
+          // se estiver atualizando valores
+        } else{     
+          const params = { 
+            valor_categoria_id: args.data.valor_categoria_id, 
+            valores_valor:  args.data.valores_valor 
+          }
+          this.updateTodo({ index: this.index, params })
+        } 
+      } else if (args.requestType === "delete") { 
+        this.removeTodo(this.index)           
+      } else if (args.requestType === "sorting") {     
+        console.log ( args.direction); 
+        if ( args.direction === 'Descending'){
+          this.data = this.$store.state.valores         
+          this.$refs.grid.ej2Instances.sortColumn('valor_categoria_id', "Ascending", true);   
+          this.$refs.grid.ej2Instances.sortColumn('valores_valor', "Ascending", true);  
+        }    
+      } else if (args.requestType === "add") { 
+        this.addNew = true
+        console.log('resquest add ', this.addNew = true)
+      }  
     },
-
-    commandClick: function(args) {
-      // debugger;
-      // console.log(args.rowData)
-      var rowID = args.target.parentElement
-      .closest("tr")
-      .getAttribute("data-uid");
-      var rowData = JSON.stringify(args.rowData);
-      // var rowData = args.rowData.nome;
-      var rowIndex = args.target.parentElement
-      .closest("tr")
-      .getAttribute("aria-rowindex");
-      alert(
-        // "rowID: " +
-        //   rowID +
-        //   "\r\nrowIndex: " +
-        //   rowIndex +
-          "\r\nDESCRIÇÃO DO ITEM: " +
-          rowData
-      );
-      this.UPDATE_SINAPRO_CATEGORIA_ITEM({ 
-        id: args.rowData.id,
-        nivel: 2,
-        sinapro_id: this.sinapro_categoria_titulo.sinapro_id, 
-        nome: args.rowData.nome,
-        sinapro: 1,
-        sinapro_numero_item: args.rowData.sinapro_numero_item,
-        sinapro_item_cabecalho_id: 1  
-      })  
-    }
   },
-  created() {
-    // console.log(this.$store.state.sinapro_categoria_item)
-    // this.getServicos();
-    // console.log(this.sinapro_categoria_titulo)
-  },
+ 
+  created(){
+    
+  }
 }
 </script>
 <style>
-
-
 @import '@/node_modules/@syncfusion/ej2-base/styles/material.css';  
 @import '@/node_modules/@syncfusion/ej2-buttons/styles/material.css';  
 @import '@/node_modules/@syncfusion/ej2-calendars/styles/material.css';  

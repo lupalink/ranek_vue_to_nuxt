@@ -1,4 +1,9 @@
 <template>
+  <!-- 
+    refactor(pages): cadastro
+    add(pages): cadastro
+    rm(pages): cadastro
+  -->
   <div id="app">  
     <ErroNotificacao :erros="erros"/>
     <ejs-button cssClass='e-primary' v-on:click.native="salvarRegistro" >Salvar Registro</ejs-button>
@@ -58,7 +63,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_SINAPRO_CATEGORIA_ITEM", "UPDATE_SINAPRO_VALOR", "UPDATE_SINAPRO_SERVICO"]),
+    ...mapMutations(["UPDATE_SINAPRO_CATEGORIA_ITEM", "UPDATE_SINAPRO_VALOR", "UPDATE_SINAPRO_SERVICO", "DEFALUT_SINAPRO_VALOR"]),
     
     salvarRegistro(){
       //  debugger;
@@ -84,6 +89,8 @@ export default {
         // this.$router.push({ name: "sinapro-opcoes" });
         // this.erros.push(error.response.data.message);
         this.SalvarValores()
+
+        this.DEFALUT_SINAPRO_VALOR()
       })
       .catch(error => {
         this.erros.push(error.response.data.message);

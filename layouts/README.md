@@ -99,6 +99,12 @@ if (args.requestType === "beginEdit" || args.requestType === "add") {
 }
 ```
 
+### pegar nome da coluna grid pelo index da array
+
+```javascript
+var column = this.$refs.grid.ej2Instances.getColumnByIndex(index).field;
+```
+
 ### Exemplo de dados para combobox
 
 ```javascript
@@ -117,4 +123,23 @@ if (args.requestType === "beginEdit" || args.requestType === "add") {
   ],
   dataSource : null,
   fields : { groupBy: 'nivel_descricao', text: 'nome', value: 'id' }
+```
+
+### Exemplo descrição valores
+
+```javascript
+this.data = [
+  {
+    valor_categoria_id: 11,
+    valores_valor: 100
+  },
+  {
+    valores_valor: 150,
+    valor_categoria_id: 12
+  },
+  {
+    valores_valor: 250,
+    valor_categoria_id: 13
+  }
+];
 ```

@@ -52,27 +52,52 @@ export const state = () => ({
   valores: [],
   alterar_valores: null,
   valores_atualizar: null,
+  valor_descricao: null,
+  todo: null
 })
 export const strict = false
 
 export const mutations = {
 
+  UPDATE_TODO(state, payload, ) {      
+    state.valores[payload.index].valor_categoria_id = payload.params.valor_categoria_id
+    state.valores[payload.index].valores_valor = payload.params.valores_valor
+  },
+
+  REMOVE_TODO(state, payload) {
+    state.valores.splice(payload, 1)
+  },
+  
+
   CHANGE_USER(state, payload) {
     state.auth.user = Object.assign(state.auth.user, payload);
   },
 
-  //   UPDATE_SINAPRO_VALOR(state, payload) {
-  //     state.valores.push(payload)
-  //  },
+  DEFALUT_SINAPRO_VALOR(state, payload) {
+    state.valores = [];
+  },
 
-  //verificar como vai ficar
+
   UPDATE_SINAPRO_VALOR(state, payload) {
-    state.valores = (payload)
+    state.valores.push(payload)
+    // state.alterar_valores = (payload)
+  },
+
+  // verificar como vai ficar
+  UPDATE_SINAPRO_VALOR_DESCRICAO_DROPDOWNLIST(state, payload) {    
     state.alterar_valores = (payload)
+  },
+  
+  UPDATE_SINAPRO_VALOR_CADASTRO(state, payload) {
+    state.valores = (payload)
   },
 
   UPDATE_SINAPRO_VALORES_ATUALIZAR(state, payload) {
     state.valores_atualizar = (payload)
+  },
+
+  UPDATE_SINAPRO_VALOR_DESCRICAO(state, payload) {
+    state.valor_descricao = (payload)
   },
 
   UPDATE_SINAPRO_CATEGORIA_TITTULO(state , payload) {
@@ -112,6 +137,23 @@ export const mutations = {
 }
 // add ação para pegar um usuario
 export const actions = {
+
+  async removeTodo({ commit }, todo) {
+    try {
+      commit('REMOVE_TODO', todo)
+    } catch (error) {
+      // TODO notif error
+    }
+  },
+
+  async updateTodo(context, payload) {
+    // try {     
+      console.log('esse é a ação ', payload)
+      context.commit('UPDATE_TODO', payload)
+    // } catch (error) {
+      // TODO notif error
+    // }
+  },
 
   async updatePost({commit}, payload){
     const {data} = await this.$axios.put(`/usuario`, payload)

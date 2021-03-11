@@ -236,6 +236,7 @@ export default {
         .delete(`servicos/deletar?veiculo=sinapro&filtro=servico&usuario_id=17&servicos_id=${id}&arquivar=0&restaurar=0&remover=1`)
           .then((response) => {
             console.log(response.data)
+            this.getServicos();
           })
           .catch(error => {
             // console.log(error.reponse);
